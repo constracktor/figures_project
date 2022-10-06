@@ -85,11 +85,13 @@ hpx_data_left_200_averaged[:,5:9] = hpx_data_left_200_averaged[:,5:9] / (1000000
 # read cores file
 hpx_cores_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_left.txt'), dtype='float', delimiter=';' , skip_header=1)
 n_entries_hpx_data = int(hpx_cores_matrix.shape[0]/n_loop_hpx)
-hpx_cores_averaged = np.zeros((n_entries_hpx_data, hpx_cores_matrix.shape[1] - 2))
+hpx_cores_averaged = np.zeros((n_entries_hpx_data, hpx_cores_matrix.shape[1] - 1))
 for i in range (n_entries_hpx_data):
-    hpx_cores_averaged[i,:] = np.mean(hpx_cores_matrix[i*n_loop_hpx:(i+1)*n_loop_hpx,2:],axis=0)
-hpx_cores_averaged[:,4] = hpx_cores_averaged[:,4] / 1000000.0
-hpx_cores_averaged[:,5:9] = hpx_cores_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
+    hpx_cores_averaged[i,:] = np.mean(hpx_cores_matrix[i*n_loop_hpx:(i+1)*n_loop_hpx,1:],axis=0)
+hpx_cores_averaged[:,5] = hpx_cores_averaged[:,5] / 1000000.0
+for i in range (6,10):
+    hpx_cores_averaged[:,i] = hpx_cores_averaged[:,i] / (1000000.0 * hpx_cores_averaged[:,0])
+#hpx_cores_averaged[:,6:10] = hpx_cores_averaged[:,6:10] / (1000000.0 * hpx_cores_averaged[:,0])
 # # ######################## REWORK SCALING
 # # RIGHT LOOKING CHOLESKY
 # # read tiles file
@@ -194,7 +196,7 @@ plt.savefig('figures/error_petsc.pdf', bbox_inches='tight')
 # DATA SCALING
 # plot PETSc and HPX data scaling for different tiled choleksy algorithms
 plt.figure(figsize=(6,4))
-plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,6], 'ks-', label='PETSc', linewidth=2)
+plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,6], 'ks--', label='PETSc', linewidth=2)
 plt.plot(hpx_data_left_10_averaged[:,1], hpx_data_left_10_averaged[:,6] + hpx_data_left_10_averaged[:,7], 'go-', label='HPX 10', linewidth=2)
 plt.plot(hpx_data_left_100_averaged[:,1], hpx_data_left_100_averaged[:,6] + hpx_data_left_100_averaged[:,7], 'bo-', label='HPX 100', linewidth=2)
 plt.plot(hpx_data_left_200_averaged[:,1], hpx_data_left_200_averaged[:,6] + hpx_data_left_200_averaged[:,7], 'ro-', label='HPX 200', linewidth=2)
@@ -209,7 +211,7 @@ plt.savefig('figures/data_cholesky_hpx_petsc_comparison.pdf', bbox_inches='tight
 
 # plot PETSc and HPX data scaling for total time
 plt.figure(figsize=(6,4))
-plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,4], 'ks-', label='PETSc', linewidth=2)
+plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,4], 'ks--', label='PETSc', linewidth=2)
 plt.plot(hpx_data_left_10_averaged[:,1], hpx_data_left_10_averaged[:,4], 'go-', label='HPX 10', linewidth=2)
 plt.plot(hpx_data_left_100_averaged[:,1], hpx_data_left_100_averaged[:,4], 'bo-', label='HPX 100', linewidth=2)
 plt.plot(hpx_data_left_200_averaged[:,1], hpx_data_left_200_averaged[:,4], 'ro-', label='HPX 200', linewidth=2)
@@ -271,17 +273,17 @@ prediction = petsc_cores_averaged[:,7]
 solve = petsc_cores_averaged[:,6]
 assembly = petsc_cores_averaged[:,5]
 plt.figure(figsize=(6,8))
-plt.plot(points, petsc_cores_averaged[:,4], 'ks-', label='PETSc Total', linewidth=2)
-plt.plot(points, assembly, 'bs-', label='PETSc Assembly')
-plt.plot(points, solve, 'gs-', label='PETSc Cholesky Solve')
-plt.plot(points, prediction, 'rs-', label='PETSc Prediction')
+plt.plot(points, petsc_cores_averaged[:,4], 'ks--', label='PETSc Total', linewidth=2)
+plt.plot(points, assembly, 'bs--', label='PETSc Assembly')
+plt.plot(points, solve, 'gs--', label='PETSc Cholesky Solve')
+plt.plot(points, prediction, 'rs--', label='PETSc Prediction')
 # HPX data
 points = hpx_cores_averaged[:,0]
-prediction = hpx_cores_averaged[:,8]
-solve = hpx_cores_averaged[:,7]
-choleksy = hpx_cores_averaged[:,6] + solve
-assembly = hpx_cores_averaged[:,5]
-plt.plot(points, hpx_cores_averaged[:,4], 'ko-', label='Total Runtime', linewidth=2)
+prediction = hpx_cores_averaged[:,9]
+solve = hpx_cores_averaged[:,8]
+choleksy = hpx_cores_averaged[:,7] + solve
+assembly = hpx_cores_averaged[:,6]
+plt.plot(points, hpx_cores_averaged[:,5], 'ko-', label='Total Runtime', linewidth=2)
 plt.plot(points, assembly, 'bo-', label='HPX Assembly')
 plt.plot(points, choleksy, 'go-', label='HPX Cholesky Solve')
 plt.plot(points, prediction, 'ro-', label='HPX Prediction')
@@ -301,17 +303,17 @@ prediction = petsc_data_averaged[:,7]
 solve = petsc_data_averaged[:,6]
 assembly = petsc_data_averaged[:,5]
 plt.figure(figsize=(6,8))
-plt.plot(points, petsc_data_averaged[:,4], 'ks-', label='PETSc Total', linewidth=2)
-plt.plot(points, assembly, 'bs-', label='PETSc Assembly')
-plt.plot(points, solve, 'gs-', label='PETSc Cholesky Solve')
-plt.plot(points, prediction, 'rs-', label='PETSc Prediction')
+plt.plot(points, petsc_data_averaged[:,4], 'ks--', label='PETSc Total', linewidth=2)
+plt.plot(points, assembly, 'bs--', label='PETSc Assembly')
+plt.plot(points, solve, 'gs--', label='PETSc Cholesky Solve')
+plt.plot(points, prediction, 'rs--', label='PETSc Prediction')
 # HPX data
-points = np.hstack((hpx_data_left_100_averaged[:,1],hpx_data_left_200_averaged[:,1]))
-prediction = np.hstack((hpx_data_left_100_averaged[:,8],hpx_data_left_200_averaged[:,8]))
-solve = np.hstack((hpx_data_left_100_averaged[:,7],hpx_data_left_200_averaged[:,7]))
-choleksy = np.hstack((hpx_data_left_100_averaged[:,6],hpx_data_left_200_averaged[:,6])) + solve
-assembly = np.hstack((hpx_data_left_100_averaged[:,5],hpx_data_left_200_averaged[:,5]))
-total = np.hstack((hpx_data_left_100_averaged[:,4],hpx_data_left_200_averaged[:,4]))
+points = np.hstack((hpx_data_left_10_averaged[:,1],hpx_data_left_200_averaged[:,1]))
+prediction = np.hstack((hpx_data_left_10_averaged[:,8],hpx_data_left_200_averaged[:,8]))
+solve = np.hstack((hpx_data_left_10_averaged[:,7],hpx_data_left_200_averaged[:,7]))
+choleksy = np.hstack((hpx_data_left_10_averaged[:,6],hpx_data_left_200_averaged[:,6])) + solve
+assembly = np.hstack((hpx_data_left_10_averaged[:,5],hpx_data_left_200_averaged[:,5]))
+total = np.hstack((hpx_data_left_10_averaged[:,4],hpx_data_left_200_averaged[:,4]))
 plt.plot(points, total, 'ko-', label='HPX Total', linewidth=2)
 plt.plot(points, assembly, 'bo-', label='HPX Assembly')
 plt.plot(points, choleksy, 'go-', label='HPX Cholesky Solve')
@@ -328,7 +330,7 @@ plt.savefig('figures/data_distribution.pdf', bbox_inches='tight')
 # BLAS COMPARISON
 # plot PETSc and HPX blas scaling
 plt.figure(figsize=(6,4))
-plt.plot(petsc_blas_averaged[:,1], petsc_blas_averaged[:,6], 'ks-', label='PETSc fblaslapack', linewidth=2)
+plt.plot(petsc_blas_averaged[:,1], petsc_blas_averaged[:,6], 'ks--', label='PETSc fblaslapack', linewidth=2)
 plt.plot(hpx_blas_averaged[:,1], hpx_blas_averaged[:,6] + hpx_blas_averaged[:,7], 'go-', label='HPX uBLAS', linewidth=2)
 #plt.title('Choleskly solve runtime of PETSc and HPX BLAS libraries for different training set sizes')
 plt.legend()
