@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
+matplotlib.rcParams.update({'font.size': 14})
 matplotlib.pyplot.title(r'ABC123 vs $\mathrm{ABC123}^{123}$')
 ################################################################################
 # READ PETSC FILES
@@ -144,13 +145,13 @@ hpx_blas_averaged[:,7] = hpx_blas_averaged[:,7] / 1000000.0
 # plot error from PETSc data (identical to HPX)
 plt.figure(figsize=(6,4))
 plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,-1], 'ko-', label='Error', linewidth=2)
-plt.title('Test error for different training set sizes')
+#plt.title('Test error for different training set sizes')
 plt.xlabel('N training samples')
 plt.xticks(petsc_data_averaged[:,1])
 plt.ylabel('Error')
 plt.xscale("log")
 plt.yscale("log")
-plt.savefig('figures/error_petsc.pdf')
+plt.savefig('figures/error_petsc.pdf', bbox_inches='tight')
 ################################################################################
 # DIFFERENT TILED ALGORITHMS
 # # plot HPX tile scaling for different tiled choleksy algorithms
@@ -184,33 +185,33 @@ plt.savefig('figures/error_petsc.pdf')
 # DATA SCALING
 # plot PETSc and HPX data scaling for different tiled choleksy algorithms
 plt.figure(figsize=(6,4))
-plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,6], 'ko-', label='PETSc', linewidth=2)
+plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,6], 'ks-', label='PETSc', linewidth=2)
 plt.plot(hpx_data_left_10_averaged[:,1], hpx_data_left_10_averaged[:,6] + hpx_data_left_10_averaged[:,7], 'go-', label='HPX 10', linewidth=2)
 plt.plot(hpx_data_left_100_averaged[:,1], hpx_data_left_100_averaged[:,6] + hpx_data_left_100_averaged[:,7], 'bo-', label='HPX 100', linewidth=2)
 plt.plot(hpx_data_left_200_averaged[:,1], hpx_data_left_200_averaged[:,6] + hpx_data_left_200_averaged[:,7], 'ro-', label='HPX 200', linewidth=2)
-plt.title('Choleskly solve runtime of PETSc and HPX for different training set sizes')
+#plt.title('Choleskly solve runtime of PETSc and HPX for different training set sizes')
 plt.legend()
 plt.xlabel('N training samples')
 plt.xticks(petsc_data_averaged[:,1])
 plt.ylabel('Time in s')
 plt.xscale("log")
 plt.yscale("log")
-plt.savefig('figures/data_cholesky_hpx_petsc_comparison.pdf')
+plt.savefig('figures/data_cholesky_hpx_petsc_comparison.pdf', bbox_inches='tight')
 
 # plot PETSc and HPX data scaling for total time
 plt.figure(figsize=(6,4))
-plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,4], 'ko-', label='PETSc', linewidth=2)
+plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,4], 'ks-', label='PETSc', linewidth=2)
 plt.plot(hpx_data_left_10_averaged[:,1], hpx_data_left_10_averaged[:,4], 'go-', label='HPX 10', linewidth=2)
 plt.plot(hpx_data_left_100_averaged[:,1], hpx_data_left_100_averaged[:,4], 'bo-', label='HPX 100', linewidth=2)
 plt.plot(hpx_data_left_200_averaged[:,1], hpx_data_left_200_averaged[:,4], 'ro-', label='HPX 200', linewidth=2)
-plt.title('Total Runtime of PETSc and HPX for different training set sizes')
+#plt.title('Total Runtime of PETSc and HPX for different training set sizes')
 plt.legend()
 plt.xlabel('N training samples')
 plt.xticks(petsc_data_averaged[:,1])
 plt.ylabel('Time in s')
 plt.xscale("log")
 plt.yscale("log")
-plt.savefig('figures/data_total_hpx_petsc_comparison.pdf')
+plt.savefig('figures/data_total_hpx_petsc_comparison.pdf', bbox_inches='tight')
 ################################################################################
 # HPX TILE RUNTIME DISTRIBUTION
 # plot HPX Runtime distribution tiles_left
@@ -220,19 +221,19 @@ solve = hpx_tiles_left_averaged[:,7]
 choleksy = hpx_tiles_left_averaged[:,6]
 assembly = hpx_tiles_left_averaged[:,5]
 plt.figure(figsize=(6,4))
-plt.plot(points, hpx_tiles_left_averaged[:,4], 'ko-', label='Total Runtime', linewidth=2)
+plt.plot(points, hpx_tiles_left_averaged[:,4], 'ko-', label='Total', linewidth=2)
 plt.plot(points, assembly, 'bo-', label='Assembly')
 plt.plot(points, choleksy, 'go-', label='Cholesky')
 plt.plot(points, solve, 'yo-', label='Triangular Solve')
 plt.plot(points, prediction, 'ro-', label='Prediction')
-plt.title('Runtime distribution HPX for different number of tiles')
-plt.legend()
-plt.xlabel('N tiles')
+#plt.title('Runtime distribution HPX for different number of tiles')
+plt.legend(loc='lower left')
+plt.xlabel('T tiles per dimension')
 plt.xticks(points)
 plt.xscale("log")
 plt.yscale("log")
 plt.ylabel('Time in s')
-plt.savefig('figures/tiles_left_distribution_hpx.pdf')
+plt.savefig('figures/tiles_left_distribution_hpx.pdf', bbox_inches='tight')
 # # plot HPX Runtime distribution data size
 # points = hpx_data_left_averaged[:,1]
 # prediction = hpx_data_left_averaged[:,8]
@@ -261,28 +262,28 @@ prediction = petsc_cores_averaged[:,7]
 solve = petsc_cores_averaged[:,6]
 assembly = petsc_cores_averaged[:,5]
 plt.figure(figsize=(6,8))
-plt.plot(points, petsc_cores_averaged[:,4], 'ks-', label='Total Runtime', linewidth=2)
-plt.plot(points, assembly, 'bs-', label='Assembly')
-plt.plot(points, solve, 'gs-', label='Cholesky Solve')
-plt.plot(points, prediction, 'rs-', label='Prediction')
+plt.plot(points, petsc_cores_averaged[:,4], 'ks-', label='PETSc Total', linewidth=2)
+plt.plot(points, assembly, 'bs-', label='PETSc Assembly')
+plt.plot(points, solve, 'gs-', label='PETSc Cholesky Solve')
+plt.plot(points, prediction, 'rs-', label='PETSc Prediction')
 # HPX data
 points = hpx_tiles_left_averaged[:,0]
 prediction = hpx_tiles_left_averaged[:,8]
 solve = hpx_tiles_left_averaged[:,7]
 choleksy = hpx_tiles_left_averaged[:,6] + solve
 assembly = hpx_tiles_left_averaged[:,5]
-plt.plot(points, hpx_tiles_left_averaged[:,4], 'ko-', label='Total Runtime', linewidth=2)
-plt.plot(points, assembly, 'bo-', label='Assembly')
-plt.plot(points, choleksy, 'go-', label='Cholesky Solve')
-plt.plot(points, prediction, 'ro-', label='Prediction')
-plt.title('Runtime distribution of HPX and PETSc for different number of cores')
-plt.legend()
+plt.plot(points, hpx_tiles_left_averaged[:,4], 'ko-', label='HPX Total', linewidth=2)
+plt.plot(points, assembly, 'bo-', label='HPX Assembly')
+plt.plot(points, choleksy, 'go-', label='HPX Cholesky Solve')
+plt.plot(points, prediction, 'ro-', label='HPX Prediction')
+#plt.title('Runtime distribution of HPX and PETSc for different number of cores')
+plt.legend(loc='lower right')
 plt.xlabel('N cores')
 plt.xticks(points)
 plt.xscale("log")
 plt.yscale("log")
 plt.ylabel('Time in s')
-plt.savefig('figures/cores_distribution.pdf')
+plt.savefig('figures/cores_distribution.pdf', bbox_inches='tight')
 ################################################################################
 # DATA RUNTIME DISTRIBUTION
 # PETSc data
@@ -291,10 +292,10 @@ prediction = petsc_data_averaged[:,7]
 solve = petsc_data_averaged[:,6]
 assembly = petsc_data_averaged[:,5]
 plt.figure(figsize=(6,8))
-plt.plot(points, petsc_data_averaged[:,4], 'ks-', label='Total Runtime', linewidth=2)
-plt.plot(points, assembly, 'bs-', label='Assembly')
-plt.plot(points, solve, 'gs-', label='Cholesky Solve')
-plt.plot(points, prediction, 'rs-', label='Prediction')
+plt.plot(points, petsc_data_averaged[:,4], 'ks-', label='PETSc Total', linewidth=2)
+plt.plot(points, assembly, 'bs-', label='PETSc Assembly')
+plt.plot(points, solve, 'gs-', label='PETSc Cholesky Solve')
+plt.plot(points, prediction, 'rs-', label='PETSc Prediction')
 # HPX data
 points = np.hstack((hpx_data_left_100_averaged[:,1],hpx_data_left_200_averaged[:,1]))
 prediction = np.hstack((hpx_data_left_100_averaged[:,8],hpx_data_left_200_averaged[:,8]))
@@ -302,32 +303,32 @@ solve = np.hstack((hpx_data_left_100_averaged[:,7],hpx_data_left_200_averaged[:,
 choleksy = np.hstack((hpx_data_left_100_averaged[:,6],hpx_data_left_200_averaged[:,6])) + solve
 assembly = np.hstack((hpx_data_left_100_averaged[:,5],hpx_data_left_200_averaged[:,5]))
 total = np.hstack((hpx_data_left_100_averaged[:,4],hpx_data_left_200_averaged[:,4]))
-plt.plot(points, total, 'ko-', label='Total Runtime', linewidth=2)
-plt.plot(points, assembly, 'bo-', label='Assembly')
-plt.plot(points, choleksy, 'go-', label='Cholesky Solve')
-plt.plot(points, prediction, 'ro-', label='Prediction')
-plt.title('Runtime distribution of PETSc and HPX for different training set sizes')
-plt.legend()
+plt.plot(points, total, 'ko-', label='HPX Total', linewidth=2)
+plt.plot(points, assembly, 'bo-', label='HPX Assembly')
+plt.plot(points, choleksy, 'go-', label='HPX Cholesky Solve')
+plt.plot(points, prediction, 'ro-', label='HPX Prediction')
+#plt.title('Runtime distribution of PETSc and HPX for different training set sizes')
+plt.legend(loc='lower right')
 plt.xlabel('N training samples')
 plt.xticks(points)
 plt.xscale("log")
 plt.yscale("log")
 plt.ylabel('Time in s')
-plt.savefig('figures/data_distribution.pdf')
+plt.savefig('figures/data_distribution.pdf', bbox_inches='tight')
 ################################################################################
 # BLAS COMPARISON
 # plot PETSc and HPX blas scaling
 plt.figure(figsize=(6,4))
-plt.plot(petsc_blas_averaged[:,1], petsc_blas_averaged[:,6], 'ko-', label='PETSc fblaslapack', linewidth=2)
+plt.plot(petsc_blas_averaged[:,1], petsc_blas_averaged[:,6], 'ks-', label='PETSc fblaslapack', linewidth=2)
 plt.plot(hpx_blas_averaged[:,1], hpx_blas_averaged[:,6] + hpx_blas_averaged[:,7], 'go-', label='HPX uBLAS', linewidth=2)
-plt.title('Choleskly solve runtime of PETSc and HPX BLAS libraries for different training set sizes')
+#plt.title('Choleskly solve runtime of PETSc and HPX BLAS libraries for different training set sizes')
 plt.legend()
-plt.xlabel('N training samples')
+plt.xlabel('N matrix dimension')
 plt.xticks(petsc_blas_averaged[:,1])
 plt.ylabel('Time in s')
 plt.xscale("log")
 plt.yscale("log")
-plt.savefig('figures/blas_cholesky_hpx_petsc_comparison.pdf')
+plt.savefig('figures/blas_cholesky_hpx_petsc_comparison.pdf', bbox_inches='tight')
 
 
 print('All figures generated.')
