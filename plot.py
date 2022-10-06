@@ -81,54 +81,63 @@ for i in range (n_entries_hpx_data):
     hpx_data_left_200_averaged[i,:] = np.mean(hpx_data_left_200_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
 hpx_data_left_200_averaged[:,4] = hpx_data_left_200_averaged[:,4] / 1000000.0
 hpx_data_left_200_averaged[:,5:9] = hpx_data_left_200_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
-# ######################## REWORK SCALING
-# RIGHT LOOKING CHOLESKY
-# read tiles file
-hpx_tiles_right_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_right.txt'), dtype='float', delimiter=';' , skip_header=1)
-hpx_tiles_right_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_right_matrix.shape[1] - 2))
-for i in range (n_entries_hpx_tiles):
-    hpx_tiles_right_averaged[i,:] = np.mean(hpx_tiles_right_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_tiles_right_averaged[:,4] = hpx_tiles_right_averaged[:,4] / 1000000.0
-for i in range(n_entries_hpx_tiles):
-    n_tiles = hpx_tiles_right_averaged[i,0] * hpx_tiles_right_averaged[i,0]
-    n_cores = n_cores_hpx
-    if (n_tiles < n_cores):
-        divider = n_tiles
-    else:
-        divider = n_cores
-    #divider = 1
-    hpx_tiles_right_averaged[i,5:9] = hpx_tiles_right_averaged[i,5:9] / (1000000.0 * divider)
-# read data file
-hpx_data_right_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right.txt'), dtype='float', delimiter=';' , skip_header=1)
-hpx_data_right_averaged = np.zeros((n_entries_hpx_data, hpx_data_right_matrix.shape[1] - 2))
+
+# read cores file
+hpx_cores_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_left.txt'), dtype='float', delimiter=';' , skip_header=1)
+n_entries_hpx_data = int(hpx_cores_matrix.shape[0]/n_loop_hpx)
+hpx_cores_averaged = np.zeros((n_entries_hpx_data, hpx_cores_matrix.shape[1] - 2))
 for i in range (n_entries_hpx_data):
-    hpx_data_right_averaged[i,:] = np.mean(hpx_data_right_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_data_right_averaged[:,4] = hpx_data_right_averaged[:,4] / 1000000.0
-hpx_data_right_averaged[:,5:9] = hpx_data_right_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
-######################
-# TOP LOOKING CHOLESKY
-# read tiles file
-hpx_tiles_top_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_top.txt'), dtype='float', delimiter=';' , skip_header=1)
-hpx_tiles_top_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_top_matrix.shape[1] - 2))
-for i in range (n_entries_hpx_tiles):
-    hpx_tiles_top_averaged[i,:] = np.mean(hpx_tiles_top_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_tiles_top_averaged[:,4] = hpx_tiles_top_averaged[:,4] / 1000000.0
-for i in range(n_entries_hpx_tiles):
-    n_tiles = hpx_tiles_top_averaged[i,0] * hpx_tiles_top_averaged[i,0]
-    n_cores = n_cores_hpx
-    if (n_tiles < n_cores):
-        divider = n_tiles
-    else:
-        divider = n_cores
-    #divider = 1
-    hpx_tiles_top_averaged[i,5:9] = hpx_tiles_top_averaged[i,5:9] / (1000000.0 * divider)
-# read data file
-hpx_data_top_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_top.txt'), dtype='float', delimiter=';' , skip_header=1)
-hpx_data_top_averaged = np.zeros((n_entries_hpx_data, hpx_data_top_matrix.shape[1] - 2))
-for i in range (n_entries_hpx_data):
-    hpx_data_top_averaged[i,:] = np.mean(hpx_data_top_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_data_top_averaged[:,4] = hpx_data_top_averaged[:,4] / 1000000.0
-hpx_data_top_averaged[:,5:9] = hpx_data_top_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
+    hpx_cores_averaged[i,:] = np.mean(hpx_cores_matrix[i*n_loop_hpx:(i+1)*n_loop_hpx,2:],axis=0)
+hpx_cores_averaged[:,4] = hpx_cores_averaged[:,4] / 1000000.0
+hpx_cores_averaged[:,5:9] = hpx_cores_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
+# # ######################## REWORK SCALING
+# # RIGHT LOOKING CHOLESKY
+# # read tiles file
+# hpx_tiles_right_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_right.txt'), dtype='float', delimiter=';' , skip_header=1)
+# hpx_tiles_right_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_right_matrix.shape[1] - 2))
+# for i in range (n_entries_hpx_tiles):
+#     hpx_tiles_right_averaged[i,:] = np.mean(hpx_tiles_right_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+# hpx_tiles_right_averaged[:,4] = hpx_tiles_right_averaged[:,4] / 1000000.0
+# for i in range(n_entries_hpx_tiles):
+#     n_tiles = hpx_tiles_right_averaged[i,0] * hpx_tiles_right_averaged[i,0]
+#     n_cores = n_cores_hpx
+#     if (n_tiles < n_cores):
+#         divider = n_tiles
+#     else:
+#         divider = n_cores
+#     #divider = 1
+#     hpx_tiles_right_averaged[i,5:9] = hpx_tiles_right_averaged[i,5:9] / (1000000.0 * divider)
+# # read data file
+# hpx_data_right_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right.txt'), dtype='float', delimiter=';' , skip_header=1)
+# hpx_data_right_averaged = np.zeros((n_entries_hpx_data, hpx_data_right_matrix.shape[1] - 2))
+# for i in range (n_entries_hpx_data):
+#     hpx_data_right_averaged[i,:] = np.mean(hpx_data_right_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+# hpx_data_right_averaged[:,4] = hpx_data_right_averaged[:,4] / 1000000.0
+# hpx_data_right_averaged[:,5:9] = hpx_data_right_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
+# ######################
+# # TOP LOOKING CHOLESKY
+# # read tiles file
+# hpx_tiles_top_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_top.txt'), dtype='float', delimiter=';' , skip_header=1)
+# hpx_tiles_top_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_top_matrix.shape[1] - 2))
+# for i in range (n_entries_hpx_tiles):
+#     hpx_tiles_top_averaged[i,:] = np.mean(hpx_tiles_top_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+# hpx_tiles_top_averaged[:,4] = hpx_tiles_top_averaged[:,4] / 1000000.0
+# for i in range(n_entries_hpx_tiles):
+#     n_tiles = hpx_tiles_top_averaged[i,0] * hpx_tiles_top_averaged[i,0]
+#     n_cores = n_cores_hpx
+#     if (n_tiles < n_cores):
+#         divider = n_tiles
+#     else:
+#         divider = n_cores
+#     #divider = 1
+#     hpx_tiles_top_averaged[i,5:9] = hpx_tiles_top_averaged[i,5:9] / (1000000.0 * divider)
+# # read data file
+# hpx_data_top_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_top.txt'), dtype='float', delimiter=';' , skip_header=1)
+# hpx_data_top_averaged = np.zeros((n_entries_hpx_data, hpx_data_top_matrix.shape[1] - 2))
+# for i in range (n_entries_hpx_data):
+#     hpx_data_top_averaged[i,:] = np.mean(hpx_data_top_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+# hpx_data_top_averaged[:,4] = hpx_data_top_averaged[:,4] / 1000000.0
+# hpx_data_top_averaged[:,5:9] = hpx_data_top_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
 
 ######################
 # BLAS
@@ -267,12 +276,12 @@ plt.plot(points, assembly, 'bs-', label='PETSc Assembly')
 plt.plot(points, solve, 'gs-', label='PETSc Cholesky Solve')
 plt.plot(points, prediction, 'rs-', label='PETSc Prediction')
 # HPX data
-points = hpx_tiles_left_averaged[:,0]
-prediction = hpx_tiles_left_averaged[:,8]
-solve = hpx_tiles_left_averaged[:,7]
-choleksy = hpx_tiles_left_averaged[:,6] + solve
-assembly = hpx_tiles_left_averaged[:,5]
-plt.plot(points, hpx_tiles_left_averaged[:,4], 'ko-', label='HPX Total', linewidth=2)
+points = hpx_cores_averaged[:,0]
+prediction = hpx_cores_averaged[:,8]
+solve = hpx_cores_averaged[:,7]
+choleksy = hpx_cores_averaged[:,6] + solve
+assembly = hpx_cores_averaged[:,5]
+plt.plot(points, hpx_cores_averaged[:,4], 'ko-', label='Total Runtime', linewidth=2)
 plt.plot(points, assembly, 'bo-', label='HPX Assembly')
 plt.plot(points, choleksy, 'go-', label='HPX Cholesky Solve')
 plt.plot(points, prediction, 'ro-', label='HPX Prediction')
