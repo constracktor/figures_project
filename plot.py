@@ -225,9 +225,9 @@ plt.savefig('figures/data_distribution.pdf', bbox_inches='tight')
 # BLAS COMPARISON
 # plot PETSc and HPX blas scaling
 plt.figure(figsize=(6,8))
-#plt.plot(petsc_blas_matrix[:,0], petsc_blas_matrix[:,1], 'gs--', label='POTRF PETSc with fblaslapack', linewidth=2)
-#plt.plot(petsc_blas_matrix[:,0], petsc_blas_matrix[:,2], 'bs--', label='TRSM PETSc with fblaslapack', linewidth=2)
-#plt.plot(petsc_blas_matrix[:,0], petsc_blas_matrix[:,3], 'rs--', label='GEMM PETSc with fblaslapack', linewidth=2)
+plt.plot(petsc_blas_matrix[:,0], petsc_blas_matrix[:,1], 'gs--', label='POTRF PETSc with fblaslapack', linewidth=2)
+plt.plot(petsc_blas_matrix[:,0], petsc_blas_matrix[:,2], 'bs--', label='TRSM PETSc with fblaslapack', linewidth=2)
+plt.plot(petsc_blas_matrix[:,0], petsc_blas_matrix[:,3], 'rs--', label='GEMM PETSc with fblaslapack', linewidth=2)
 plt.plot(hpx_blas_matrix[:,0], hpx_blas_matrix[:,1], 'go-', label='POTRF uBLAS', linewidth=2)
 plt.plot(hpx_blas_matrix[:,0], hpx_blas_matrix[:,2], 'bo-', label='TRSM uBLAS', linewidth=2)
 plt.plot(hpx_blas_matrix[:,0], hpx_blas_matrix[:,3], 'ro-', label='GEMM uBLAS', linewidth=2)
