@@ -79,7 +79,7 @@ hpx_data_left_200_averaged[:,4] = hpx_data_left_200_averaged[:,4] / 1000000.0
 hpx_data_left_200_averaged[:,5:9] = hpx_data_left_200_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
 
 # read cores file
-hpx_cores_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_left.txt'), dtype='float', delimiter=';' , skip_header=1)
+hpx_cores_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_left_200.txt'), dtype='float', delimiter=';' , skip_header=1)
 n_entries_hpx_data = int(hpx_cores_matrix.shape[0]/n_loop_hpx)
 hpx_cores_averaged = np.zeros((n_entries_hpx_data, hpx_cores_matrix.shape[1] - 1))
 for i in range (n_entries_hpx_data):
