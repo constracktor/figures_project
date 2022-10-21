@@ -29,57 +29,57 @@ petsc_blas_matrix = np.genfromtxt(os.path.abspath('./data_petsc/blas_petsc.txt')
 ################################################################################
 # READ HPX FILES
 # get header and loop number for averaging
-hpx_header = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_left_10.txt'), dtype='unicode', delimiter=';' , max_rows=1)
+hpx_header = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right_10.txt'), dtype='unicode', delimiter=';' , max_rows=1)
 n_loop_hpx = int(hpx_header[-1])
 #######################
-# LEFT LOOKING CHOLESKY
+# right LOOKING CHOLESKY
 # read tiles file
-hpx_tiles_left_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_left.txt'), dtype='float', delimiter=';' , skip_header=1)
-n_entries_hpx_tiles = int(hpx_tiles_left_matrix.shape[0]/n_loop_hpx)
-n_cores_hpx = hpx_tiles_left_matrix[0,1]
-hpx_tiles_left_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_left_matrix.shape[1] - 2))
+hpx_tiles_right_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_right.txt'), dtype='float', delimiter=';' , skip_header=1)
+n_entries_hpx_tiles = int(hpx_tiles_right_matrix.shape[0]/n_loop_hpx)
+n_cores_hpx = hpx_tiles_right_matrix[0,1]
+hpx_tiles_right_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_right_matrix.shape[1] - 2))
 for i in range (n_entries_hpx_tiles):
-    hpx_tiles_left_averaged[i,:] = np.mean(hpx_tiles_left_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_tiles_left_averaged[:,4] = hpx_tiles_left_averaged[:,4] / 1000000.0
+    hpx_tiles_right_averaged[i,:] = np.mean(hpx_tiles_right_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+hpx_tiles_right_averaged[:,4] = hpx_tiles_right_averaged[:,4] / 1000000.0
 for i in range(n_entries_hpx_tiles):
-    n_tiles = hpx_tiles_left_averaged[i,0] * hpx_tiles_left_averaged[i,0]
+    n_tiles = hpx_tiles_right_averaged[i,0] * hpx_tiles_right_averaged[i,0]
     n_cores = n_cores_hpx
     if (n_tiles < n_cores):
         divider = n_tiles
     else:
         divider = n_cores
     #divider = 1
-    hpx_tiles_left_averaged[i,5:9] = hpx_tiles_left_averaged[i,5:9] / (1000000.0 * divider)
+    hpx_tiles_right_averaged[i,5:9] = hpx_tiles_right_averaged[i,5:9] / (1000000.0 * divider)
 
 # read data file
-hpx_data_left_10_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_left_10.txt'), dtype='float', delimiter=';' , skip_header=1)
-n_entries_hpx_data = int(hpx_data_left_10_matrix.shape[0]/n_loop_hpx)
-hpx_data_left_10_averaged = np.zeros((n_entries_hpx_data, hpx_data_left_10_matrix.shape[1] - 2))
+hpx_data_right_10_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right_10.txt'), dtype='float', delimiter=';' , skip_header=1)
+n_entries_hpx_data = int(hpx_data_right_10_matrix.shape[0]/n_loop_hpx)
+hpx_data_right_10_averaged = np.zeros((n_entries_hpx_data, hpx_data_right_10_matrix.shape[1] - 2))
 for i in range (n_entries_hpx_data):
-    hpx_data_left_10_averaged[i,:] = np.mean(hpx_data_left_10_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_data_left_10_averaged[:,4] = hpx_data_left_10_averaged[:,4] / 1000000.0
-hpx_data_left_10_averaged[:,5:9] = hpx_data_left_10_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
+    hpx_data_right_10_averaged[i,:] = np.mean(hpx_data_right_10_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+hpx_data_right_10_averaged[:,4] = hpx_data_right_10_averaged[:,4] / 1000000.0
+hpx_data_right_10_averaged[:,5:9] = hpx_data_right_10_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
 
 # read data file for 100 tiles
-hpx_data_left_100_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_left_100.txt'), dtype='float', delimiter=';' , skip_header=1)
-n_entries_hpx_data = int(hpx_data_left_100_matrix.shape[0]/n_loop_hpx)
-hpx_data_left_100_averaged = np.zeros((n_entries_hpx_data, hpx_data_left_100_matrix.shape[1] - 2))
+hpx_data_right_100_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right_100.txt'), dtype='float', delimiter=';' , skip_header=1)
+n_entries_hpx_data = int(hpx_data_right_100_matrix.shape[0]/n_loop_hpx)
+hpx_data_right_100_averaged = np.zeros((n_entries_hpx_data, hpx_data_right_100_matrix.shape[1] - 2))
 for i in range (n_entries_hpx_data):
-    hpx_data_left_100_averaged[i,:] = np.mean(hpx_data_left_100_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_data_left_100_averaged[:,4] = hpx_data_left_100_averaged[:,4] / 1000000.0
-hpx_data_left_100_averaged[:,5:9] = hpx_data_left_100_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
+    hpx_data_right_100_averaged[i,:] = np.mean(hpx_data_right_100_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+hpx_data_right_100_averaged[:,4] = hpx_data_right_100_averaged[:,4] / 1000000.0
+hpx_data_right_100_averaged[:,5:9] = hpx_data_right_100_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
 
 # read data file for 200 tiles
-hpx_data_left_200_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_left_200.txt'), dtype='float', delimiter=';' , skip_header=1)
-n_entries_hpx_data = int(hpx_data_left_200_matrix.shape[0]/n_loop_hpx)
-hpx_data_left_200_averaged = np.zeros((n_entries_hpx_data, hpx_data_left_200_matrix.shape[1] - 2))
+hpx_data_right_200_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right_200.txt'), dtype='float', delimiter=';' , skip_header=1)
+n_entries_hpx_data = int(hpx_data_right_200_matrix.shape[0]/n_loop_hpx)
+hpx_data_right_200_averaged = np.zeros((n_entries_hpx_data, hpx_data_right_200_matrix.shape[1] - 2))
 for i in range (n_entries_hpx_data):
-    hpx_data_left_200_averaged[i,:] = np.mean(hpx_data_left_200_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_data_left_200_averaged[:,4] = hpx_data_left_200_averaged[:,4] / 1000000.0
-hpx_data_left_200_averaged[:,5:9] = hpx_data_left_200_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
+    hpx_data_right_200_averaged[i,:] = np.mean(hpx_data_right_200_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
+hpx_data_right_200_averaged[:,4] = hpx_data_right_200_averaged[:,4] / 1000000.0
+hpx_data_right_200_averaged[:,5:9] = hpx_data_right_200_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
 
 # read cores file
-hpx_cores_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_left_200.txt'), dtype='float', delimiter=';' , skip_header=1)
+hpx_cores_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_right_200.txt'), dtype='float', delimiter=';' , skip_header=1)
 n_entries_hpx_data = int(hpx_cores_matrix.shape[0]/n_loop_hpx)
 hpx_cores_averaged = np.zeros((n_entries_hpx_data, hpx_cores_matrix.shape[1] - 1))
 for i in range (n_entries_hpx_data):
@@ -111,9 +111,9 @@ plt.savefig('figures/error_petsc.pdf', bbox_inches='tight')
 # plot PETSc and HPX data scaling for different tiled choleksy algorithms
 plt.figure(figsize=(6,4))
 plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,6], 'ks--', label='PETSc', linewidth=2)
-plt.plot(hpx_data_left_10_averaged[:,1], hpx_data_left_10_averaged[:,6] + hpx_data_left_10_averaged[:,7], 'go-', label='HPX 10', linewidth=2)
-plt.plot(hpx_data_left_100_averaged[:,1], hpx_data_left_100_averaged[:,6] + hpx_data_left_100_averaged[:,7], 'bo-', label='HPX 100', linewidth=2)
-plt.plot(hpx_data_left_200_averaged[:,1], hpx_data_left_200_averaged[:,6] + hpx_data_left_200_averaged[:,7], 'ro-', label='HPX 200', linewidth=2)
+plt.plot(hpx_data_right_10_averaged[:,1], hpx_data_right_10_averaged[:,6] + hpx_data_right_10_averaged[:,7], 'go-', label='HPX 10', linewidth=2)
+plt.plot(hpx_data_right_100_averaged[:,1], hpx_data_right_100_averaged[:,6] + hpx_data_right_100_averaged[:,7], 'bo-', label='HPX 100', linewidth=2)
+plt.plot(hpx_data_right_200_averaged[:,1], hpx_data_right_200_averaged[:,6] + hpx_data_right_200_averaged[:,7], 'ro-', label='HPX 200', linewidth=2)
 #plt.title('Choleskly solve runtime of PETSc and HPX for different training set sizes')
 plt.legend()
 plt.xlabel('N training samples')
@@ -126,9 +126,9 @@ plt.savefig('figures/data_cholesky_hpx_petsc_comparison.pdf', bbox_inches='tight
 # plot PETSc and HPX data scaling for total time
 plt.figure(figsize=(6,4))
 plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,4], 'ks--', label='PETSc', linewidth=2)
-plt.plot(hpx_data_left_10_averaged[:,1], hpx_data_left_10_averaged[:,4], 'go-', label='HPX 10', linewidth=2)
-plt.plot(hpx_data_left_100_averaged[:,1], hpx_data_left_100_averaged[:,4], 'bo-', label='HPX 100', linewidth=2)
-plt.plot(hpx_data_left_200_averaged[:,1], hpx_data_left_200_averaged[:,4], 'ro-', label='HPX 200', linewidth=2)
+plt.plot(hpx_data_right_10_averaged[:,1], hpx_data_right_10_averaged[:,4], 'go-', label='HPX 10', linewidth=2)
+plt.plot(hpx_data_right_100_averaged[:,1], hpx_data_right_100_averaged[:,4], 'bo-', label='HPX 100', linewidth=2)
+plt.plot(hpx_data_right_200_averaged[:,1], hpx_data_right_200_averaged[:,4], 'ro-', label='HPX 200', linewidth=2)
 #plt.title('Total Runtime of PETSc and HPX for different training set sizes')
 plt.legend()
 plt.xlabel('N training samples')
@@ -139,26 +139,26 @@ plt.yscale("log")
 plt.savefig('figures/data_total_hpx_petsc_comparison.pdf', bbox_inches='tight')
 ################################################################################
 # HPX TILE RUNTIME DISTRIBUTION
-# plot HPX Runtime distribution tiles_left
-points = hpx_tiles_left_averaged[:,0]
-prediction = hpx_tiles_left_averaged[:,8]
-solve = hpx_tiles_left_averaged[:,7]
-choleksy = hpx_tiles_left_averaged[:,6]
-assembly = hpx_tiles_left_averaged[:,5]
+# plot HPX Runtime distribution tiles_right
+points = hpx_tiles_right_averaged[:,0]
+prediction = hpx_tiles_right_averaged[:,8]
+solve = hpx_tiles_right_averaged[:,7]
+choleksy = hpx_tiles_right_averaged[:,6]
+assembly = hpx_tiles_right_averaged[:,5]
 plt.figure(figsize=(6,4))
-plt.plot(points, hpx_tiles_left_averaged[:,4], 'ko-', label='Total', linewidth=2)
+plt.plot(points, hpx_tiles_right_averaged[:,4], 'ko-', label='Total', linewidth=2)
 plt.plot(points, assembly, 'bo-', label='Assembly')
 plt.plot(points, choleksy, 'go-', label='Cholesky')
 plt.plot(points, solve, 'yo-', label='Triangular Solve')
 plt.plot(points, prediction, 'ro-', label='Prediction')
 #plt.title('Runtime distribution HPX for different number of tiles')
-plt.legend(loc='lower left')
+plt.legend(loc='lower right')
 plt.xlabel('T tiles per dimension')
 plt.xticks(points)
 plt.xscale("log")
 plt.yscale("log")
 plt.ylabel('Time in s')
-plt.savefig('figures/tiles_left_distribution_hpx.pdf', bbox_inches='tight')
+plt.savefig('figures/tiles_right_distribution_hpx.pdf', bbox_inches='tight')
 
 ################################################################################
 # CORES RUNTIME DISTRIBUTION
@@ -203,12 +203,12 @@ plt.plot(points, assembly, 'bs--', label='PETSc Assembly')
 plt.plot(points, solve, 'gs--', label='PETSc Cholesky Solve')
 plt.plot(points, prediction, 'rs--', label='PETSc Prediction')
 # HPX data
-points = np.hstack((hpx_data_left_10_averaged[:,1],hpx_data_left_200_averaged[:,1]))
-prediction = np.hstack((hpx_data_left_10_averaged[:,8],hpx_data_left_200_averaged[:,8]))
-solve = np.hstack((hpx_data_left_10_averaged[:,7],hpx_data_left_200_averaged[:,7]))
-choleksy = np.hstack((hpx_data_left_10_averaged[:,6],hpx_data_left_200_averaged[:,6])) + solve
-assembly = np.hstack((hpx_data_left_10_averaged[:,5],hpx_data_left_200_averaged[:,5]))
-total = np.hstack((hpx_data_left_10_averaged[:,4],hpx_data_left_200_averaged[:,4]))
+points = np.hstack((hpx_data_right_10_averaged[:,1],hpx_data_right_200_averaged[:,1]))
+prediction = np.hstack((hpx_data_right_10_averaged[:,8],hpx_data_right_200_averaged[:,8]))
+solve = np.hstack((hpx_data_right_10_averaged[:,7],hpx_data_right_200_averaged[:,7]))
+choleksy = np.hstack((hpx_data_right_10_averaged[:,6],hpx_data_right_200_averaged[:,6])) + solve
+assembly = np.hstack((hpx_data_right_10_averaged[:,5],hpx_data_right_200_averaged[:,5]))
+total = np.hstack((hpx_data_right_10_averaged[:,4],hpx_data_right_200_averaged[:,4]))
 plt.plot(points, total, 'ko-', label='HPX Total', linewidth=2)
 plt.plot(points, assembly, 'bo-', label='HPX Assembly')
 plt.plot(points, choleksy, 'go-', label='HPX Cholesky Solve')
