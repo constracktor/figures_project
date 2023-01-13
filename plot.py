@@ -14,7 +14,7 @@ greyscale = ['#000000', '#333333', '#666666', '#999999', '#cccccc']
 ################################################################################
 # READ PETSC FILES
 # get header and loop number for averaging
-petsc_header = np.genfromtxt(os.path.abspath('./data_petsc/data_petsc.txt'), dtype='unicode', delimiter=';' , max_rows=1)
+petsc_header = np.genfromtxt(os.path.abspath('./data_petsc/cores_petsc.txt'), dtype='unicode', delimiter=';' , max_rows=1)
 n_loop_petsc = int(petsc_header[-1])
 
 # read cores file
@@ -24,40 +24,16 @@ petsc_cores_averaged = np.zeros((n_entries_petsc_cores, petsc_cores_matrix.shape
 for i in range (n_entries_petsc_cores):
     petsc_cores_averaged[i,:] = np.mean(petsc_cores_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,:-1],axis=0)
 
-# read data file
-petsc_data_matrix = np.genfromtxt(os.path.abspath('./data_petsc/data_petsc.txt'), dtype='float', delimiter=';' , skip_header=1)
-n_entries_petsc_data = int(petsc_data_matrix.shape[0]/n_loop_petsc)
-petsc_data_averaged = np.zeros((n_entries_petsc_data, petsc_data_matrix.shape[1] - 1))
-for i in range (n_entries_petsc_data):
-    petsc_data_averaged[i,:] = np.mean(petsc_data_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,:-1],axis=0)
+# read blas file
+petsc_blas_matrix = np.genfromtxt(os.path.abspath('./data_petsc/blas_petsc.txt'), dtype='float', delimiter=';' , skip_header=1)
 
 ################################################################################
 # READ HPX FILES
 # get header and loop number for averaging
-hpx_header = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right_100.txt'), dtype='unicode', delimiter=';' , max_rows=1)
+hpx_header = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_right_200.txt'), dtype='unicode', delimiter=';' , max_rows=1)
 n_loop_hpx = int(hpx_header[-1])
 
-# read data file for 100 tiles
-hpx_data_right_100_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right_100.txt'), dtype='float', delimiter=';' , skip_header=1)
-# read cores of data scaling
-n_cores_hpx = hpx_data_right_100_matrix[0,1]
-n_entries_hpx_data = int(hpx_data_right_100_matrix.shape[0]/n_loop_hpx)
-hpx_data_right_100_averaged = np.zeros((n_entries_hpx_data, hpx_data_right_100_matrix.shape[1] - 2))
-for i in range (n_entries_hpx_data):
-    hpx_data_right_100_averaged[i,:] = np.mean(hpx_data_right_100_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_data_right_100_averaged[:,4] = hpx_data_right_100_averaged[:,4] / 1000000.0
-hpx_data_right_100_averaged[:,5:9] = hpx_data_right_100_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
-
-# read data file for 200 tiles
-hpx_data_right_200_matrix = np.genfromtxt(os.path.abspath('./data_hpx/data_hpx_right_200.txt'), dtype='float', delimiter=';' , skip_header=1)
-n_entries_hpx_data = int(hpx_data_right_200_matrix.shape[0]/n_loop_hpx)
-hpx_data_right_200_averaged = np.zeros((n_entries_hpx_data, hpx_data_right_200_matrix.shape[1] - 2))
-for i in range (n_entries_hpx_data):
-    hpx_data_right_200_averaged[i,:] = np.mean(hpx_data_right_200_matrix[i*n_loop_petsc:(i+1)*n_loop_petsc,2:],axis=0)
-hpx_data_right_200_averaged[:,4] = hpx_data_right_200_averaged[:,4] / 1000000.0
-hpx_data_right_200_averaged[:,5:9] = hpx_data_right_200_averaged[:,5:9] / (1000000.0 * n_cores_hpx)
-
-# read cores file
+# read cores file double precision
 hpx_cores_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_right_200.txt'), dtype='float', delimiter=';' , skip_header=1)
 n_entries_hpx_data = int(hpx_cores_matrix.shape[0]/n_loop_hpx)
 hpx_cores_averaged = np.zeros((n_entries_hpx_data, hpx_cores_matrix.shape[1] - 1))
@@ -67,7 +43,7 @@ hpx_cores_averaged[:,5] = hpx_cores_averaged[:,5] / 1000000.0
 for i in range (6,10):
     hpx_cores_averaged[:,i] = hpx_cores_averaged[:,i] / (1000000.0 * hpx_cores_averaged[:,0])
 
-# # read cores file single precision
+# read cores file single precision
 hpx_cores_sp_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_right_200_sp.txt'), dtype='float', delimiter=';' , skip_header=1)
 n_entries_hpx_data = int(hpx_cores_matrix.shape[0]/n_loop_hpx)
 hpx_cores_sp_averaged = np.zeros((n_entries_hpx_data, hpx_cores_sp_matrix.shape[1] - 1))
@@ -77,7 +53,7 @@ hpx_cores_sp_averaged[:,5] = hpx_cores_sp_averaged[:,5] / 1000000.0
 for i in range (6,10):
     hpx_cores_sp_averaged[:,i] = hpx_cores_sp_averaged[:,i] / (1000000.0 * hpx_cores_sp_averaged[:,0])
 
-# read tiles file forupported as devices in the Docker runtim 128 cores
+# read tiles file for 128 cores
 hpx_tiles_right_128_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_right_128.txt'), dtype='float', delimiter=';' , skip_header=1)
 n_entries_hpx_tiles = int(hpx_tiles_right_128_matrix.shape[0]/n_loop_hpx)
 hpx_tiles_right_128_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_right_128_matrix.shape[1] - 2))
@@ -104,7 +80,7 @@ for i in range (n_entries_hpx_tiles):
 hpx_tiles_right_18_cpu_averaged[:,4] = hpx_tiles_right_18_cpu_averaged[:,4] / 1000000.0
 # careful only total total time ist converted to seconds
 
-# read tiles file for 18 cores plus GPU
+# read tiles file for 18 cores CPU plus GPU
 hpx_tiles_right_18_gpu_matrix = np.genfromtxt(os.path.abspath('./data_hpx/tiles_hpx_right_gpu_18.txt'), dtype='float', delimiter=';' , skip_header=1)
 n_entries_hpx_tiles = int(hpx_tiles_right_18_gpu_matrix.shape[0]/n_loop_hpx)
 hpx_tiles_right_18_gpu_averaged = np.zeros((n_entries_hpx_tiles, hpx_tiles_right_18_gpu_matrix.shape[1] - 2))
@@ -112,11 +88,6 @@ for i in range (n_entries_hpx_tiles):
     hpx_tiles_right_18_gpu_averaged[i,:] = np.mean(hpx_tiles_right_18_gpu_matrix[i*n_loop_hpx:(i+1)*n_loop_hpx,2:],axis=0)
 hpx_tiles_right_18_gpu_averaged[:,4] = hpx_tiles_right_18_gpu_averaged[:,4] / 1000000.0
 # careful only total total time ist converted to seconds
-
-################################################################################
-# BLAS
-# read blas file
-petsc_blas_matrix = np.genfromtxt(os.path.abspath('./data_petsc/blas_petsc.txt'), dtype='float', delimiter=';' , skip_header=1)
 
 # read blas file
 hpx_blas_matrix = np.genfromtxt(os.path.abspath('./data_hpx/blas_hpx.txt'), dtype='float', delimiter=';' , skip_header=1)
@@ -130,7 +101,7 @@ plt.plot(points, hpx_tiles_right_18_cpu_averaged[:,4], 's--', c=colors[2], linew
 plt.plot(points, hpx_tiles_right_18_gpu_averaged[:,4], 's--', c=colors[4], linewidth=1, label='18 Cores + GPU')
 plt.plot(points, hpx_tiles_right_16_averaged[:,4], 'o-', c=colors[1], linewidth=1, label='16 Cores')
 plt.plot(points, hpx_tiles_right_128_averaged[:,4], 'o-', c=colors[0], linewidth=1, label='128 Cores')
-#plt.title('Tile scaling HPX implementation for different number of cores')
+#plt.title('Tile scaling HPX implementation for different tile sizes')
 plt.legend(loc='lower left')
 plt.xlabel('Tile size and tiles per dimension ')
 plt.xscale("log")
@@ -161,9 +132,6 @@ solve = hpx_cores_averaged[:,8]
 choleksy = hpx_cores_averaged[:,7] + solve
 assembly = hpx_cores_averaged[:,6]
 total = hpx_cores_averaged[:,5]
-print('Percentage Cholesky:', 100 * choleksy / total)
-print('Percentage Assembly:', 100 * assembly / total)
-print('Percentage Prediction:', 100 * prediction / total)
 plt.plot(points, total, 'o-', c=colors[0], linewidth=1, label='HPX Total')
 plt.plot(points, choleksy, 'o-', c=colors[4], linewidth=1, label='HPX Cholesky')
 plt.plot(points, assembly, 'o-', c=colors[2], linewidth=1, label='HPX Assembly')
@@ -236,37 +204,6 @@ plt.yticks(ticks=ticks_y, labels=ticks_y)
 plt.savefig('figures/cores_speedup.pdf', bbox_inches='tight')
 
 ################################################################################
-# DATA RUNTIME DISTRIBUTION
-# PETSc data
-points = petsc_data_averaged[:,1]
-prediction = petsc_data_averaged[:,7]
-solve = petsc_data_averaged[:,6]
-assembly = petsc_data_averaged[:,5]
-plt.figure(figsize=(10,5))
-plt.plot(points, petsc_data_averaged[:,4], 's--', c=colors[0], linewidth=1, label='PETSc Total')
-plt.plot(points, solve, 's--', c=colors[4], linewidth=1, label='PETSc Cholesky Solve')
-plt.plot(points, assembly, 's--', c=colors[2], linewidth=1, label='PETSc Assembly')
-plt.plot(points, prediction, 's--', c=colors[1], linewidth=1, label='PETSc Prediction')
-# HPX data
-points = hpx_data_right_200_averaged[:,1]
-prediction = hpx_data_right_200_averaged[:,8]
-solve = hpx_data_right_200_averaged[:,7]
-choleksy = hpx_data_right_200_averaged[:,6] + solve
-assembly = hpx_data_right_200_averaged[:,5]
-total = hpx_data_right_200_averaged[:,4]
-plt.plot(points, total, 'o-', c=colors[0], linewidth=1, label='HPX Total')
-plt.plot(points, choleksy, 'o-', c=colors[4], linewidth=1, label='HPX Cholesky')
-plt.plot(points, assembly, 'o-', c=colors[2], linewidth=1, label='HPX Assembly')
-plt.plot(points, prediction, 'o-', c=colors[1], linewidth=1, label='HPX Prediction')
-#plt.title('Runtime distribution of PETSc and HPX for different training set sizes')
-plt.legend(loc='lower right')
-plt.xlabel('N training samples')
-plt.xscale("log")
-plt.yscale("log")
-plt.ylabel('Time in s')
-plt.savefig('figures/data_distribution.pdf', bbox_inches='tight')
-
-################################################################################
 # BLAS COMPARISON
 # plot PETSc and HPX blas scaling
 plt.figure(figsize=(10,5))
@@ -276,56 +213,13 @@ plt.plot(petsc_blas_matrix[:,0], petsc_blas_matrix[:,3], 's--', c=colors[1], lin
 plt.plot(hpx_blas_matrix[:,0], hpx_blas_matrix[:,1], 'o-', c=colors[4], linewidth=1, label='POTRF uBLAS')
 plt.plot(hpx_blas_matrix[:,0], hpx_blas_matrix[:,2], 'o-', c=colors[2], linewidth=1, label='TRSM uBLAS')
 plt.plot(hpx_blas_matrix[:,0], hpx_blas_matrix[:,3], 'o-', c=colors[1], linewidth=1, label='GEMM uBLAS')
-#plt.title('Choleskly solve runtime of PETSc and HPX BLAS libraries for different training set sizes')
+#plt.title('Comparison of uBLAS and PETSc with fblaslapack for different training set sizes')
 plt.legend()
 plt.xlabel('N matrix dimension')
 plt.xticks(petsc_blas_matrix[:,0])
 plt.ylabel('Time in s')
 plt.xscale("log")
 plt.yscale("log")
-plt.savefig('figures/blas_cholesky_hpx_petsc_comparison.pdf', bbox_inches='tight')
+plt.savefig('figures/blas_hpx_petsc_comparison.pdf', bbox_inches='tight')
 
-################################################################################
-# ERROR
-# # plot error from PETSc data (identical to HPX)
-# plt.figure(figsize=(6,4))
-# plt.plot(petsc_data_averaged[:,1], pef1or cholesky solve for different tiles per dimension
-# plt.figure(figsize=(6,4))tsc_data_averaged[:,-1], 'ko-', label='Error', linewidth=2)
-# #plt.title('Test error for different training set sizes')
-# plt.xlabel('N training samples')
-# plt.xticks(petsc_data_averaged[:,1])
-# plt.ylabel('Error')
-# plt.xscale("log")
-# plt.yscale("log")
-# plt.savefig('figures/error_petsc.pdf', bbox_inches='tight')
-
-################################################################################
-# DATA SCALING
-# # plot PETSc and HPX data scaling f1or cholesky solve for different tiles per dimension
-# plt.figure(figsize=(6,4))
-# plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,6], 'ks--', label='PETSc', linewidth=2)
-# plt.plot(hpx_data_right_100_averaged[:,1], hpx_data_right_100_averaged[:,6] + hpx_data_right_100_averaged[:,7], 'bo-', label='HPX 100', linewidth=2)
-# plt.plot(hpx_data_right_200_averaged[:,1], hpx_data_right_200_averaged[:,6] + hpx_data_right_200_averaged[:,7], 'ro-', label='HPX 200', linewidth=2)
-# #plt.title('Choleskly solve runtime of PETSc and HPX for different training set sizes')
-# plt.legend()
-# plt.xlabel('N training samples')
-# plt.xticks(petsc_data_averaged[:,1])
-# plt.ylabel('Time in s')
-# plt.xscale("log")
-# plt.yscale("log")
-# plt.savefig('figures/data_cholesky_hpx_petsc_comparison.pdf', bbox_inches='tight')
-#
-# # plot PETSc and HPX data scaling for total time for different tiles per dimension
-# plt.figure(figsize=(6,4))
-# plt.plot(petsc_data_averaged[:,1], petsc_data_averaged[:,4], 'ks--', label='PETSc', linewidth=2)
-# plt.plot(hpx_data_right_100_averaged[:,1], hpx_data_right_100_averaged[:,4], 'bo-', label='HPX 100', linewidth=2)
-# plt.plot(hpx_data_right_200_averaged[:,1], hpx_data_right_200_averaged[:,4], 'ro-', label='HPX 200', linewidth=2)
-# #plt.title('Total Runtime of PETSc and HPX for different training set sizes')
-# plt.legend()
-# plt.xlabel('N training samples')
-# plt.xticks(petsc_data_averaged[:,1])
-# plt.ylabel('Time in s')
-# plt.xscale("log")
-# plt.yscale("log")
-# plt.savefig('figures/data_total_hpx_petsc_comparison.pdf', bbox_inches='tight')
 print('All figures generated.')

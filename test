@@ -1,8 +1,0 @@
-hpx_cores_sp_matrix = np.genfromtxt(os.path.abspath('./data_hpx/cores_hpx_right_200_sp.txt'), dtype='float', delimiter=';' , skip_header=1)
-n_entries_hpx_data = int(hpx_cores_matrix.shape[0]/n_loop_hpx)
-hpx_cores_sp_averaged = np.zeros((n_entries_hpx_data, hpx_cores_sp_matrix.shape[1] - 1))
-for i in range (n_entries_hpx_data):
-    hpx_cores_sp_averaged[i,:] = np.mean(hpx_cores_sp_matrix[i*n_loop_hpx:(i+1)*n_loop_hpx,1:],axis=0)
-hpx_cores_sp_averaged[:,5] = hpx_cores_sp_averaged[:,5] / 1000000.0
-for i in range (6,10):
-    hpx_cores_sp_averaged[:,i] = hpx_cores_sp_averaged[:,i] / (1000000.0 * hpx_cores_sp_averaged[:,0])
