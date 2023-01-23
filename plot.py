@@ -97,10 +97,10 @@ hpx_blas_matrix = np.genfromtxt(os.path.abspath('./data_hpx/blas_hpx.txt'), dtyp
 # plot HPX Runtime distribution tiles_right
 points = hpx_tiles_right_128_averaged[:,0]
 plt.figure(figsize=(10,5))
-plt.plot(points, hpx_tiles_right_18_cpu_averaged[:,4], 's--', c=colors[2], linewidth=1, label='18 Cores')
-plt.plot(points, hpx_tiles_right_18_gpu_averaged[:,4], 's--', c=colors[4], linewidth=1, label='18 Cores + GPU')
-plt.plot(points, hpx_tiles_right_16_averaged[:,4], 'o-', c=colors[1], linewidth=1, label='16 Cores')
-plt.plot(points, hpx_tiles_right_128_averaged[:,4], 'o-', c=colors[0], linewidth=1, label='128 Cores')
+plt.plot(points, hpx_tiles_right_16_averaged[:,4], 'o-', c=colors[1], linewidth=1, label='System 1, 16 Cores')
+plt.plot(points, hpx_tiles_right_128_averaged[:,4], 'o-', c=colors[0], linewidth=1, label='System 1, 128 Cores')
+plt.plot(points, hpx_tiles_right_18_cpu_averaged[:,4], 's--', c=colors[2], linewidth=1, label='System 2, 18 Cores')
+plt.plot(points, hpx_tiles_right_18_gpu_averaged[:,4], 's--', c=colors[4], linewidth=1, label='System 2, 18 Cores + GPU')
 #plt.title('Tile scaling HPX implementation for different tile sizes')
 plt.legend(loc='lower left')
 plt.xlabel('Tile size and tiles per dimension ')
@@ -110,7 +110,7 @@ for i in range(0,labels_x.size):
     labels_x[i] = labels_x[i] + "\n T = " + points[i].astype(int).astype(str)
 plt.xticks(ticks=points, labels=labels_x)
 plt.yscale("log")
-plt.ylabel('Time in s')
+plt.ylabel('Runtime in s')
 plt.savefig('figures/tiles_right_scaling_hpx.pdf', bbox_inches='tight')
 
 ################################################################################
@@ -143,13 +143,13 @@ plt.xscale("log")
 labels_x = points.astype(int).astype(str)
 plt.xticks(ticks=points, labels= labels_x)
 plt.yscale("log")
-plt.ylabel('Time in s')
+plt.ylabel('Runtime in s')
 plt.savefig('figures/cores_distribution.pdf', format='pdf', bbox_inches='tight')
 
 ################################################################################
 # CORES PARALLEL EFFICIENCY
 # plot PETSc and HPX data scaling parallel efficiency
-plt.figure(figsize=(10,5))
+plt.figure(figsize=(10,3))
 # line
 plt.plot(points, 100 *np.ones(points.size), 'k:', linewidth=1)
 # PETSc data
@@ -173,7 +173,7 @@ plt.ylabel('Parallel efficiency in %')
 ticks_y = np.linspace(50, 100, num=6, endpoint=True, dtype=int)
 plt.yticks(ticks=ticks_y)
 plt.savefig('figures/cores_efficiency.pdf', bbox_inches='tight')
-
+print(hpx_cores_sp_averaged[:,5] / hpx_cores_averaged[:,5])
 ################################################################################
 # CORES PARALLEL SPEEDUP
 # plot PETSc and HPX data scaling parallel efficiency

@@ -5,8 +5,8 @@ identification with Gaussian processes minimum working examples used for
 "Scalability of Gaussian Processes using Asynchronous Tasks:
 A Comparison between HPX and PETSc"
 
-## Run code (requires nmupy and matplotlib)
-`python3 plot.py`
+## Run code in virtual environment
+`./generate_plots.sh`
 
 ## Run code in docker container
 
