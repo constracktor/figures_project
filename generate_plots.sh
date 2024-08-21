@@ -7,3 +7,4 @@ source plot_env/bin/activate
 pip install --no-cache-dir -r docker/requirements.txt
 # launch game
 python3 plot.py
+python3 plot_tiles.py

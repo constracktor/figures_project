@@ -89,6 +89,11 @@ for i in range (n_entries_hpx_tiles):
 hpx_tiles_right_18_gpu_averaged[:,4] = hpx_tiles_right_18_gpu_averaged[:,4] / 1000000.0
 # careful only total total time ist converted to seconds
 
+
+# read tiles file for 18 cores CPU plus GPU wirh recycled memory
+hpx_tiles_gpu_recycle_averaged = np.genfromtxt(os.path.abspath('./data_hpx/tiles_gpu_18_recycle.txt'), dtype='float', delimiter=';' , skip_header=1)
+hpx_tiles_gpu_recycle_averaged[:,6] = hpx_tiles_gpu_recycle_averaged[:,6] / 1000000.0
+
 # read blas file
 hpx_blas_matrix = np.genfromtxt(os.path.abspath('./data_hpx/blas_hpx.txt'), dtype='float', delimiter=';' , skip_header=1)
 
@@ -101,6 +106,7 @@ plt.plot(points, hpx_tiles_right_16_averaged[:,4], 'o-', c=colors[1], linewidth=
 plt.plot(points, hpx_tiles_right_128_averaged[:,4], 'o-', c=colors[0], linewidth=1, label='System 1, 128 Cores')
 plt.plot(points, hpx_tiles_right_18_cpu_averaged[:,4], 's--', c=colors[2], linewidth=1, label='System 2, 18 Cores')
 plt.plot(points, hpx_tiles_right_18_gpu_averaged[:,4], 's--', c=colors[4], linewidth=1, label='System 2, 18 Cores + GPU')
+plt.plot(points[2:], hpx_tiles_gpu_recycle_averaged[:,6], 's--', c=colors[3], linewidth=1, label='System 2, 18 Cores + GPU recycle')
 #plt.title('Tile scaling HPX implementation for different tile sizes')
 plt.legend(loc='lower left')
 plt.xlabel('Tile size and tiles per dimension ')
